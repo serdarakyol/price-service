@@ -25,19 +25,15 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run tests with Maven
-        run: mvn clean test
-
-      - name: Build JAR package
-        if: success()
-        run: mvn clean package -DskipTests
+      - name: Run tests and build JAR
+        run: mvn clean install
 
       - name: Upload JAR artifact
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: price-service-jar
-          path: target/*.jar
+          path: target/price-service-0.0.1-SNAPSHOT.jar
           retention-days: 7
 
       - name: Upload test reports
@@ -49,3 +45,11 @@ jobs:
             target/surefire-reports/
             target/failsafe-reports/
           retention-days: 7
+
+      - name: Display build info
+        if: success()
+        run: |
+          echo "=== Build Successful ==="
+          echo "JAR file: target/price-service-0.0.1-SNAPSHOT.jar"
+          echo "File size: $(du -h target/price-service-0.0.1-SNAPSHOT.jar | cut -f1)"
+          echo "========================"
