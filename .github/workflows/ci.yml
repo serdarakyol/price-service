@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+concurrency:
+  group: ci-${{ github.ref }}-group
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run tests and build JAR
+        run: mvn clean install
+
+      - name: Upload JAR artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: price-service-jar
+          path: target/price-service-0.0.1-SNAPSHOT.jar
+          retention-days: 7
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            target/surefire-reports/
+            target/failsafe-reports/
+          retention-days: 7
+
+      - name: Display build info
+        if: success()
+        run: |
+          echo "=== Build Successful ==="
+          echo "JAR file: target/price-service-0.0.1-SNAPSHOT.jar"
+          echo "File size: $(du -h target/price-service-0.0.1-SNAPSHOT.jar | cut -f1)"
+          echo "========================"
