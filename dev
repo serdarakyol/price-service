@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -e
+SOURCE="${BASH_SOURCE[0]}"
+ROOT_DIR="$(dirname "$(realpath ${SOURCE})")"
+DIST_FOLDER=${ROOT_DIR}/dist
+
+function displayUsage() {
+    echo "
+Usage: $0 <command>
+<command>:
+    help
+        Display this help message.
+    code-run
+        Runs containerized app
+"
+}
+
+function codeRun() {
+
+    # check if docker installed
+    if ! [ -x "$(command -v docker --version)" ]; then
+        error_msg "Docker Desktop is not installed.
+        Please install Docker Desktop from https://docs.docker.com/get-docker/"
+    fi
+
+    docker build -t price-service . \
+      && docker run --rm --name price-service -p 8080:8080 price-service
+}
+
+
+function main() {
+    case "${1-notset}" in
+        help)
+            displayUsage
+            ;;
+        code-run)
+            codeRun "${@}"
+            ;;
+        *)
+            >&2 echo "Error: Unknown command: '${1-}'"
+            >&2 displayUsage
+            exit 1
+    esac
+}
+
+main "$@"
