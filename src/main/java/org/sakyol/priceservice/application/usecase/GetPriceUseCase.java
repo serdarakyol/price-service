@@ -32,7 +32,6 @@ public class GetPriceUseCase {
         return new PriceResponse(
                 price.productId(),
                 price.brandId(),
-                price.priceListId(),
                 price.startDate(),
                 price.endDate(),
                 price.price()
