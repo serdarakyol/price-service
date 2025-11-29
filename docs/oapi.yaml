@@ -49,9 +49,6 @@ components:
         brandId:
           type: integer
           format: int64
-        priceListId:
-          type: integer
-          format: int64
         startDate:
           type: string
           format: date-time
