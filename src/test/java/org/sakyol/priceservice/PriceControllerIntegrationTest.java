@@ -43,6 +43,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.startDate").value("2020-06-14T00:00:00"))
                 .andExpect(jsonPath("$.endDate").value("2020-12-31T23:59:59"))
                 .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.priceListId").value(1))
                 .andExpect(jsonPath("$.finalPrice").value(35.50));
     }
 
@@ -62,6 +63,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.startDate").value("2020-06-14T15:00:00"))
                 .andExpect(jsonPath("$.endDate").value("2020-06-14T18:30:00"))
                 .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.priceListId").value(2))
                 .andExpect(jsonPath("$.finalPrice").value(25.45));
     }
 
@@ -80,6 +82,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.startDate").value("2020-06-14T00:00:00"))
                 .andExpect(jsonPath("$.endDate").value("2020-12-31T23:59:59"))
                 .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.priceListId").value(1))
                 .andExpect(jsonPath("$.finalPrice").value(35.50));
     }
 
@@ -98,6 +101,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.startDate").value("2020-06-15T00:00:00"))
                 .andExpect(jsonPath("$.endDate").value("2020-06-15T15:00:00"))
                 .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.priceListId").value(3))
                 .andExpect(jsonPath("$.finalPrice").value(30.50));
     }
 
@@ -116,6 +120,7 @@ public class PriceControllerIntegrationTest {
                 .andExpect(jsonPath("$.startDate").value("2020-06-15T16:00:00"))
                 .andExpect(jsonPath("$.endDate").value("2020-12-31T23:59:59"))
                 .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.priceListId").value(4))
                 .andExpect(jsonPath("$.finalPrice").value(38.95));
     }
 
