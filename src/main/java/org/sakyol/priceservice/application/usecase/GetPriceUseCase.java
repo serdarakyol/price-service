@@ -30,6 +30,7 @@ public class GetPriceUseCase {
     private PriceResponse toResponse(Price price) {
         // Mapping from Domain Entity to Application DTO (Implements the Liskov Substitution Principle if Price/PriceResponse were in a hierarchy, or Dependency Inversion by isolating mapping)
         return new PriceResponse(
+                price.priceListId(),
                 price.productId(),
                 price.brandId(),
                 price.startDate(),
