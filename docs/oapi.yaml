@@ -1,43 +1,67 @@
----
-openapi: 3.1.0
+openapi: 3.0.4
 info:
-  title: OpenAPI definition
-  version: v0
+  title: Price Service API
+  version: 0.0.1-SNAPSHOT
+  description: API for retrieving applicable product prices based on date, product, and brand
 servers:
   - url: http://localhost:8080
-    description: Generated server url
+    description: Local development server
 paths:
   "/api/v1/prices":
     get:
       tags:
-        - price-controller
+        - Price Service API
+      summary: Get applicable price
+      description: |
+        Retrieve the applicable price for a specific product and brand at a given date and time.
+        The system will return the price with the highest priority that matches:
+          - The specified product ID
+          - The specified brand ID  
+          - A price validity period that includes the application date
       operationId: getApplicablePrice
       parameters:
         - name: application_date
           in: query
+          description: |
+            Date and time for which to find the applicable price.
+            Format: yyyy-MM-dd-HH.mm.ss
           required: true
           schema:
             type: string
             format: date-time
+            pattern: '^\d{4}-\d{2}-\d{2}-\d{2}\.\d{2}\.\d{2}$'
+            example: "2024-06-14-15.00.00"
         - name: product_id
           in: query
+          description: Unique identifier of the product
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
+            example: 35455
         - name: brand_id
           in: query
           required: true
+          description: Unique identifier of the brand/chain
           schema:
             type: integer
             format: int64
+            minimum: 1
+            example: 1
       responses:
         '200':
-          description: OK
+          description: Successful operation - Price found
           content:
-            "*/*":
+            application/json:
               schema:
                 "$ref": "#/components/schemas/PriceResponse"
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+
 components:
   schemas:
     PriceResponse:
