@@ -11,6 +11,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate OpenAPI file exists
+        id: check-file
+        run: |
+          if [ ! -f "docs/oapi.yaml" ]; then
+            echo "❌ File docs/oapi.yaml not found!"
+            exit 1
+          fi
+          echo "✅ Found docs/oapi.yaml"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install OpenAPI CLI
+        run: npm install -g @redocly/openapi-cli
+
+      - name: Lint OpenAPI spec
+        run: openapi lint docs/oapi.yaml
+
   test-and-build:
     runs-on: ubuntu-latest
 
