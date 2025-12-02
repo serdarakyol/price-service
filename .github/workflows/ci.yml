@@ -31,7 +31,7 @@ jobs:
         uses: stoplightio/spectral-action@master
         with:
           file: docs/oapi.yaml
-          spectral_ruleset: .spectral.yaml
+          spectral_ruleset: spectral:oas/recommended
           fail_on: error
   test-and-build:
     runs-on: ubuntu-latest
