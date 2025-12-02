@@ -18,15 +18,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Validate OpenAPI file exists
+        id: check-file
+        run: |
+          if [ ! -f "docs/oapi.yaml" ]; then
+            echo "❌ File docs/oapi.yaml not found!"
+            exit 1
+          fi
+          echo "✅ Found docs/oapi.yaml"
+
       - name: Run Spectral validation
-        uses: stoplightio/spectral-action
+        uses: stoplightio/spectral-action@master
         with:
           file: docs/oapi.yaml
           fail_on: error
-
-      - name: Validation passed
-        if: success()
-        run: echo "✅ OpenAPI lint validation passed!"
   test-and-build:
     runs-on: ubuntu-latest
 
