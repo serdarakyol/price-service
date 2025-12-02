@@ -31,6 +31,8 @@ jobs:
         uses: stoplightio/spectral-action@latest
         with:
           file_glob: docs/oapi.yaml
+          args: lint docs/oapi.yaml --ruleset oas
+  
   test-and-build:
     runs-on: ubuntu-latest
 
