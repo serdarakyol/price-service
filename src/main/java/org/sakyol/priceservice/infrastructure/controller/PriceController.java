@@ -2,6 +2,7 @@ package org.sakyol.priceservice.infrastructure.controller;
 
 import lombok.AllArgsConstructor;
 import org.sakyol.priceservice.application.dto.PriceResponse;
+import org.sakyol.priceservice.application.dto.PriceResponseMapper;
 import org.sakyol.priceservice.application.usecase.GetPriceUseCase;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PriceController {
     private final GetPriceUseCase getPriceUseCase;
+    private final PriceResponseMapper responseMapper;
 
     @GetMapping("/api/v1/prices")
     public ResponseEntity<PriceResponse> getApplicablePrice(
@@ -25,6 +27,7 @@ public class PriceController {
             @RequestParam("brand_id") long brandId) {
 
         return getPriceUseCase.execute(applicationDate, productId, brandId)
+                .map(responseMapper::toResponse)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
