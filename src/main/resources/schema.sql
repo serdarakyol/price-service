@@ -13,8 +13,5 @@ CREATE TABLE IF NOT EXISTS PRICES (
 CREATE INDEX IF NOT EXISTS idx_prices_product_brand
     ON PRICES(product_id, brand_id);
 
-CREATE INDEX IF NOT EXISTS idx_prices_start_end
-    ON PRICES(start_date, end_date);
-
-CREATE INDEX IF NOT EXISTS idx_prices_product_brand_dates
-    ON PRICES(product_id, brand_id, start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_prices_product_brand_start
+    ON PRICES(product_id, brand_id, start_date);
