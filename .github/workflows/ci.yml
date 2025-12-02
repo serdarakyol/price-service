@@ -28,10 +28,9 @@ jobs:
           echo "✅ Found docs/oapi.yaml"
 
       - name: Run Spectral validation
-        uses: stoplightio/spectral-action@master
+        uses: stoplightio/spectral-action@latest
         with:
           file_glob: docs/oapi.yaml
-          spectral_ruleset: spectral:oas/recommended
   test-and-build:
     runs-on: ubuntu-latest
 
