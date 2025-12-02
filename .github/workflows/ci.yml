@@ -18,32 +18,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Validate OpenAPI file exists
-        id: check-file
-        run: |
-          if [ ! -f "docs/oapi.yaml" ]; then
-            echo "File docs/oapi.yaml not found!"
-            echo "Found files in docs/:"
-            ls -la docs/ || echo "No docs directory"
-            exit 1
-          fi
-          echo "✅ Found docs/oapi.yaml"
-          echo "file_size=$(wc -l < docs/oapi.yaml)" >> $GITHUB_OUTPUT
-
-      - name: Display OpenAPI info
-        run: |
-          echo "=== OpenAPI File Info ==="
-          echo "Lines: ${{ steps.check-file.outputs.file_size }}"
-          echo "OpenAPI version: $(yq eval '.openapi' docs/oapi.yaml 2>/dev/null || echo 'Not found')"
-          echo "Title: $(yq eval '.info.title' docs/oapi.yaml 2>/dev/null || echo 'Not found')"
-          echo "Version: $(yq eval '.info.version' docs/oapi.yaml 2>/dev/null || echo 'Not found')"
-          echo "Paths: $(yq eval '.paths | length' docs/oapi.yaml 2>/dev/null || echo '0') endpoints"
-
       - name: Run Spectral validation
-        uses: stoplightio/spectral-action@v1
+        uses: stoplightio/spectral-action
         with:
           file: docs/oapi.yaml
           fail_on: error
+
+      - name: Validation passed
+        if: success()
+        run: echo "✅ OpenAPI lint validation passed!"
   test-and-build:
     runs-on: ubuntu-latest
 
