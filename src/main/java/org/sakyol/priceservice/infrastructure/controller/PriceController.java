@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.sakyol.priceservice.application.dto.PriceResponse;
 import org.sakyol.priceservice.application.dto.PriceResponseMapper;
 import org.sakyol.priceservice.application.usecase.GetPriceUseCase;
+import org.sakyol.priceservice.domain.exception.PriceNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,6 @@ public class PriceController {
         return getPriceUseCase.execute(applicationDate, productId, brandId)
                 .map(responseMapper::toResponse)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new PriceNotFoundException("No price found for given parameters: " + applicationDate + ", " + productId + ", " + brandId + "."));
     }
 }
