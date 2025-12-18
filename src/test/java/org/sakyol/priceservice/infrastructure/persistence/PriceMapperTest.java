@@ -40,4 +40,28 @@ class PriceMapperTest {
     void toDomain_shouldReturnNull_whenInputIsNull() {
         assertNull(mapper.toDomain(null));
     }
+
+    @Test
+    void toDomain_shouldHandleNullPriorityAndPrice_byDefaultingToZero() {
+        // Arrange
+        PriceJpaEntity entity = new PriceJpaEntity();
+        // Set mandatory fields (to avoid NullPointerException on unboxing other fields)
+        entity.setPriceListId(1L);
+        entity.setBrandId(1L);
+        entity.setProductId(35455L);
+        entity.setStartDate(LocalDateTime.now());
+        entity.setEndDate(LocalDateTime.now().plusDays(1));
+        entity.setCurrency("EUR");
+
+        // Explicitly ensure priority and price are null
+        entity.setPriority(null);
+        entity.setPrice(null);
+
+        // Act
+        Price result = mapper.toDomain(entity);
+
+        // Assert
+        assertEquals(0, result.priority(), "Priority should default to 0 when null");
+        assertEquals(0.0, result.price(), "Price should default to 0.0 when null");
+    }
 }

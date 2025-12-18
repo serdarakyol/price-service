@@ -62,4 +62,45 @@ class PriceControllerTest {
                         .param("brand_id", "1"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void getApplicablePrice_shouldReturn400_whenParameterIsMissing() throws Exception {
+        // Omit 'product_id' intentionally to trigger MissingServletRequestParameterException
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("application_date", "2020-06-14-10.00.00")
+                        .param("brand_id", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Bad Request"))
+                // Verify the message contains info about the missing parameter
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("product_id")));
+    }
+
+    @Test
+    void getApplicablePrice_shouldReturn400_whenTypeMismatch() throws Exception {
+        // Send "abc" for 'product_id' (expecting Long) to trigger MethodArgumentTypeMismatchException
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("application_date", "2020-06-14-10.00.00")
+                        .param("product_id", "abc")
+                        .param("brand_id", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Bad Request"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("product_id")));
+    }
+
+    @Test
+    void getApplicablePrice_shouldReturn500_whenUnexpectedErrorOccurs() throws Exception {
+        // Arrange: Force the service to throw a generic RuntimeException
+        when(getPriceUseCase.execute(any(), anyLong(), anyLong()))
+                .thenThrow(new RuntimeException("Unexpected database connection failure"));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/v1/prices")
+                        .param("application_date", "2020-06-14-10.00.00")
+                        .param("product_id", "35455")
+                        .param("brand_id", "1"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.status").value(500))
+                .andExpect(jsonPath("$.error").value("Internal Server Error"))
+                .andExpect(jsonPath("$.message").value("Unexpected database connection failure"));
+    }
 }
