@@ -15,7 +15,7 @@ public class PriceMapper {
                 entity.getProductId(),
                 entity.getPriority() == null ? 0 : entity.getPriority(),
                 entity.getPrice() == null ? 0.0 : entity.getPrice(),
-                entity.getCurr()
+                entity.getCurrency()
         );
     }
 }

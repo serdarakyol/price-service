@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS PRICES (
     product_id      BIGINT NOT NULL,
     priority        INTEGER NOT NULL,
     price           DOUBLE NOT NULL,
-    curr            VARCHAR(3) NOT NULL
+    currency            VARCHAR(3) NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_prices_product_brand

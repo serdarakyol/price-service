@@ -9,11 +9,11 @@ import java.util.Optional;
 
 @Repository
 public interface PriceJpaRepository extends JpaRepository<PriceJpaEntity, Long> {
-    @Query("SELECT p FROM PriceJpaEntity p " +
-            "WHERE p.productId = :productId " +
-                "AND p.brandId = :brandId " +
-                "AND :applicationDate BETWEEN p.startDate AND p.endDate " +
-            "ORDER BY p.priority DESC " +
-            "LIMIT 1")
+    @Query(value = "SELECT * FROM PRICES " +
+            "WHERE product_id = :productId " +
+                "AND brand_id = :brandId " +
+                "AND :applicationDate BETWEEN start_date AND end_date " +
+            "ORDER BY priority DESC, price DESC " +
+            "LIMIT 1", nativeQuery = true)
     Optional<PriceJpaEntity> findApplicable(LocalDateTime applicationDate, long productId, long brandId);
 }

@@ -20,5 +20,5 @@ public class PriceJpaEntity {
     private Long productId;
     private Integer priority;
     private Double price;
-    private String curr;
+    private String currency;
 }
